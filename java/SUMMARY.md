@@ -4,4 +4,4 @@
 
 ## Releases
 
-* [v8](releases/v8.md)
+* [v8](versions/8.md)
