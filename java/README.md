@@ -1,22 +1,3 @@
----
-
-coverY: 0
-layout:
-  cover:
-    visible: false
-    size: full
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: true
----
-
 # Introduction
 
 It's been a while since I worked on a real Java project. The last Java version I used was 6, which was very long ago. Java has always been close to my heart, as this is my first programming language as a developer. I tried to get on board with the latest versions but could never start learning seriously.
