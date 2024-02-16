@@ -2,6 +2,6 @@
 
 * [Introduction](README.md)
 
-## versions
+## Releases
 
-* [8⃣ 8](versions/8.md)
+* [v8](releases/v8.md)
