@@ -1,7 +1,7 @@
 # Table of contents
 
-* [INTRODUCTION](README.md)
+* [Introduction](README.md)
 
-## JAVA 8
+## versions
 
-* [Page 1](java-8/page-1.md)
+* [8⃣ 8](versions/8.md)
