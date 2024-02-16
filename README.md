@@ -1,19 +1,23 @@
 # Introduction
 
-It's been a while since I blogged, I usually like to keep track of notes and stuff for my reference in an online blog.
+Lately, I'm feeling terrible. I'm under the constant feeling of falling behind with all the latest developments happening in web development. The last time I learned something new was almost 6 years back.&#x20;
 
-I'm a web developer and my main goal is to keep myself updated and get familiar with new technologies and frameworks.
+I'm currently working on React, Ruby & Rails, MYSQL, and AWS and I'm very much comfortable with what I'm doing, that's exactly why I'm not liking :disappointed::disappointed::angry:
 
-I'm currently working on React, Ruby & Rails, MYSQL, and AWS.
+I have 11 years of experience and I don't know shit about Algorithms and Data structures and I feel ashamed. So for the next, whatever time it takes I want to get myself comfortable with the following:
 
-I'm in a comfort zone and I'm not liking it :disappointed::disappointed::angry:
+:dart: Data Structures and Algorithms
 
-Whatever the time it takes I want to get myself comfortable with the following:
+:dart: Java (Spring)
 
-* Java + Spring
-* AWS
-* DevOps (Docker, Deployments, etc...)
-* AWS (Associate Architect Certification) :dart:
-* Terraform (Maybe...) :pray:
+:dart: AWS
+
+:dart: DevOps (Docker, Deployments, etc...)
+
+:dart: AWS (Associate Architect Certification) :dart:
+
+:dart: Terraform (Maybe...) :pray:
 
 I chose git books as it felt like the right choice for me as I don't want to maintain any kind of static sites and want to keep track of my progress.
+
+I will try to log the progress every day as much as possible.
