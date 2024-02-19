@@ -6,4 +6,4 @@
 
 * [Introduction](java/introduction.md)
 * [Releases](java/releases/README.md)
-  * [version: 8](java/releases/v8.md)
+  * [Version: 8](java/releases/v8.md)
