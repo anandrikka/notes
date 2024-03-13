@@ -2,7 +2,7 @@
 
 This page is a quick go-to for all the commands I usually encounter while working with docker.&#x20;
 
-<pre class="language-docker" data-title="Docker Commands" data-overflow="wrap" data-full-width="true"><code class="lang-docker">############### Most commonly used ##################
+<pre class="language-shell" data-title="Docker Commands" data-overflow="wrap" data-full-width="true"><code class="lang-shell">############### Most commonly used ##################
 
 # List All docker images
 docker image ls
@@ -51,6 +51,9 @@ docker inspect &#x3C;image-name>:&#x3C;version> -f '{{ json .ContainerConfig }}'
 
 # Add Environment variables
 docker run --name &#x3C;container-name> -e &#x3C;env-name>=&#x3C;value> -e &#x3C;env-name>=&#x3C;value> &#x3C;image-name>:&#x3C;version>
+
+# Start the stopped container
+docker start &#x3C;container-name>
 
 ################## Volumes ########################
 
