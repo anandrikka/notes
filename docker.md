@@ -27,15 +27,18 @@ docker rmi &#x3C;image-name>:&#x3C;version>
 docker rm &#x3C;container-name>
 
 # Run a docker container from an image
-<strong># d: Run container in detach mode
-</strong><strong># p: Map ports
-</strong><strong># v: Map volumes
-</strong><strong># --name: Name of the container
-</strong># docker run --name nginx_demo -d -p 8080:80 -v $(pwd):/usr/share/nginx/html nginx:latest
-docker run --name &#x3C;container-name> -d -p &#x3C;host-port>:&#x3C;container-port> -v &#x3C;local-path>:&#x3C;container-path> &#x3C;image>:&#x3C;version>
-
-# bash into the image
-docker run -it nginx:latest bash
+# Arguments accepted to run the image
+# -d        To detach the container from the terminal, so it doesn't block it
+# -p        Map the host's port to the port in the container. Eg: -p 8081:80
+# -v        Map the docker volume or directory with the container directory
+#           Ex: -v app:/mnt/app mount the docker volume `app` to container `/mnt/app`
+#           Ex: -v ./var/tmp:/mnt/app mount the folder `/var/tmp` to `/mnt/app`
+#           Ex: -v .:/mnt/tmp mount current folder to /mnt/tmp
+# -e        Environment variable into the container. Eg: -e POSTGRES_PASSWORD='demo$'
+# -it       To delve into the container terminal. Eg: docker run -it &#x3C;container-name> bash
+# --mount   To mount the directory from the host into the container, it's the more detailed version of volume binding
+#           Ex: --mount type=bind,source=&#x3C;src-directory>,destination=&#x3C;target-directory>,readonly     
+docker run --name &#x3C;container-name> &#x3C;image>:&#x3C;version>
 
 # bash into a container
 docker exec -it &#x3C;container-name> bash
@@ -48,9 +51,6 @@ docker commit &#x3C;container-id> &#x3C;name-of-image>:&#x3C;version>
 docker inspect &#x3C;image-name>:&#x3C;version>
 # Can use the -f flag to extract specifics from a json
 docker inspect &#x3C;image-name>:&#x3C;version> -f '{{ json .ContainerConfig }}'
-
-# Add Environment variables
-docker run --name &#x3C;container-name> -e &#x3C;env-name>=&#x3C;value> -e &#x3C;env-name>=&#x3C;value> &#x3C;image-name>:&#x3C;version>
 
 # Start the stopped container
 docker start &#x3C;container-name>
@@ -73,6 +73,9 @@ docker run --name nginx -v $(pwd):/usr/share/nginx -v /tmp/data:data
 
 # Mount directory from host into the container
 <strong>docker run -d --name &#x3C;container-name> --mount type=bind,source=&#x3C;src-directory>,destination=&#x3C;target-directory>,readonly &#x3C;image-name>:&#x3C;version>
+</strong><strong>
+</strong><strong>################## Networks ########################
+</strong><strong>
 </strong></code></pre>
 
 {% hint style="info" %}
