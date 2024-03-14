@@ -2,84 +2,18 @@
 
 This page is a quick go-to for all the commands I usually encounter while working with docker.&#x20;
 
-<pre class="language-shell" data-title="Docker Commands" data-overflow="wrap" data-full-width="true"><code class="lang-shell">############### Most commonly used ##################
+### Docker Commands
 
-# List All docker images
-docker image ls
+<table data-full-width="true"><thead><tr><th width="353">Description</th><th>Command</th></tr></thead><tbody><tr><td>List all docker images</td><td><code>docker images</code> or <code>docker image ls</code></td></tr><tr><td>Pull image from registry</td><td><code>docker pull &#x3C;image-name>:&#x3C;version></code></td></tr><tr><td>List all running containers</td><td><code>docker ps</code></td></tr><tr><td>List all container including stopped</td><td><code>docker ps -a</code></td></tr><tr><td>Stop running container</td><td><code>docker stop &#x3C;container-name></code></td></tr><tr><td>Remove an image</td><td><code>docker rmi &#x3C;image>:&#x3C;version></code></td></tr><tr><td>Remove container</td><td><code>docker rm &#x3C;container-name></code></td></tr><tr><td>Start an existing container</td><td><code>docker start &#x3C;container-name></code></td></tr><tr><td>Start a new container</td><td><code>docker run --name &#x3C;image>:&#x3C;version></code></td></tr><tr><td>Access terminal of running container</td><td><code>docker exec -it &#x3C;container-name> bash</code></td></tr><tr><td>Access terminal by running a container</td><td><code>docker run -it &#x3C;image>:&#x3C;version></code></td></tr><tr><td> Remove all stopped containers</td><td><code>docker container prune</code></td></tr><tr><td>Commit running container into a new image</td><td><code>docker commit &#x3C;container-id> &#x3C;image>:&#x3C;version></code></td></tr><tr><td>Inspect docker image</td><td><code>docker inspect &#x3C;image>:&#x3C;version></code></td></tr><tr><td>List docker volumes</td><td><code>docker volume ls</code></td></tr><tr><td>Create docker volume</td><td><code>docker volume create &#x3C;name></code></td></tr><tr><td>Clean unused volumes</td><td><code>docker volume prune</code></td></tr></tbody></table>
 
-# Pull the image from the docker hub
-# If the version is not specified, it will be the latest by default
-docker pull &#x3C;image-name>:&#x3C;version>
+#### Command Arguments for run
 
-# List All running containers
-docker ps
+<table data-full-width="true"><thead><tr><th width="124">Argument</th><th width="254">Description</th><th>Example</th></tr></thead><tbody><tr><td><code>-d</code></td><td>Run the container in detach mode</td><td><code>docker run -d &#x3C;image>:&#x3C;version></code></td></tr><tr><td><code>--name</code></td><td>Give the name to container</td><td><code>docker run -d --name &#x3C;container-name> &#x3C;image>:&#x3C;version></code></td></tr><tr><td><code>-p</code></td><td>Map the host's port to the port in container</td><td><code>docker run -p 8080:80 &#x3C;image>:&#x3C;version></code></td></tr><tr><td><code>-e</code></td><td>Pass environment variables into container</td><td><code>docker run -e ENV_VAR_1=test -e ENV_VAR_2=test2</code></td></tr><tr><td><code>-it</code></td><td>Run an interactive terminal</td><td><code>docker run -it &#x3C;image>:&#x3C;version></code></td></tr><tr><td><code>--rm</code></td><td>Container cleans up once stopped</td><td><code>docker run --rm -d -it &#x3C;image>:&#x3C;version></code></td></tr><tr><td><code>--mount</code></td><td>To mount directories from host into the container. It's more detailed version of volume mounting</td><td><code>--mount type=bind,source=&#x3C;src>,destination=&#x3C;target>,readonly</code></td></tr><tr><td><code>-v</code></td><td>Mount volumes</td><td><code>-v app:/mnt/app</code><br><code>-v var/tmp:/mnt/app</code><br><code>-v .:/mnt/app</code></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
 
-# List All containers including stopped
-docker ps -a
 
-# Stop a running container
-docker stop &#x3C;container-name>
-
-# Remove an image
-docker rmi &#x3C;image-name>:&#x3C;version>
-
-# Remove container
-docker rm &#x3C;container-name>
-
-# Run a docker container from an image
-# Arguments accepted to run the image
-# -d        To detach the container from the terminal, so it doesn't block it
-# -p        Map the host's port to the port in the container. Eg: -p 8081:80
-# -v        Map the docker volume or directory with the container directory
-#           Ex: -v app:/mnt/app mount the docker volume `app` to container `/mnt/app`
-#           Ex: -v ./var/tmp:/mnt/app mount the folder `/var/tmp` to `/mnt/app`
-#           Ex: -v .:/mnt/tmp mount current folder to /mnt/tmp
-# -e        Environment variable into the container. Eg: -e POSTGRES_PASSWORD='demo$'
-# -it       To delve into the container terminal. Eg: docker run -it &#x3C;container-name> bash
-# --mount   To mount the directory from the host into the container, it's the more detailed version of volume binding
-#           Ex: --mount type=bind,source=&#x3C;src-directory>,destination=&#x3C;target-directory>,readonly     
-docker run --name &#x3C;container-name> &#x3C;image>:&#x3C;version>
-
-# bash into a container
-docker exec -it &#x3C;container-name> bash
-
-# Create an image from the container
-# docker commit abch12lddss custom-postgres:v1
-docker commit &#x3C;container-id> &#x3C;name-of-image>:&#x3C;version>
-
-# Inspect docker image
-docker inspect &#x3C;image-name>:&#x3C;version>
-# Can use the -f flag to extract specifics from a json
-docker inspect &#x3C;image-name>:&#x3C;version> -f '{{ json .ContainerConfig }}'
-
-# Start the stopped container
-docker start &#x3C;container-name>
-
-################## Volumes ########################
-
-# Check the list of volumes
-docker volume ls
-
-# Create a volume
-docker volume create &#x3C;name>
-
-# Remove unused volumes
-docker volume prune
-
-# Attaching volume to a container
-# We can attach multiple volumes, volumes are mapped separated by a :
-# The left side is from the host and the right side is in the container
-docker run --name nginx -v $(pwd):/usr/share/nginx -v /tmp/data:data
-
-# Mount directory from host into the container
-<strong>docker run -d --name &#x3C;container-name> --mount type=bind,source=&#x3C;src-directory>,destination=&#x3C;target-directory>,readonly &#x3C;image-name>:&#x3C;version>
-</strong><strong>
-</strong><strong>################## Networks ########################
-</strong><strong>
-</strong></code></pre>
 
 {% hint style="info" %}
-Using `--rm` flag to start the container will remove all the traces of the container when stopped, meaning the stopped container will not be even visible in `docker ps -a`
+Using `--rm` flag to start the container will remove all the traces of the container when stopped, meaning the stopped container will not even be visible in `docker ps -a`
 {% endhint %}
 
 {% hint style="info" %}
