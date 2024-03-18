@@ -74,7 +74,7 @@ We can increase the performance of the S3 bucket by having multiple prefixes (fo
 
 `3500` upload & `5500` download `request/sec/prefix` so we could achieve a lot of throughput if we have a lot of prefixes in our bucket.
 
-KMS encryption is restricted for upload/download requests and they are region-specific. They allow anywhere from 5500 - 30000 req/sec and also we cannot increase the quota.
+> KMS encryption is restricted for upload/download requests and they are region-specific. They allow anywhere from 5500 - 30000 req/sec and also we cannot increase the quota.
 
 #### Replication
 
