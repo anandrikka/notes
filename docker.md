@@ -27,7 +27,7 @@ Using `--rm` flag to start the container will remove all the traces of the conta
 {% hint style="info" %}
 `-v` and `--mount` are the same, but `--mount` is more explicit and `-v` is a shorthand notation
 
-<img src=".gitbook/assets/image (2).png" alt="" data-size="original">
+<img src=".gitbook/assets/image (2) (1).png" alt="" data-size="original">
 {% endhint %}
 
 {% hint style="info" %}

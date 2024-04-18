@@ -254,7 +254,7 @@ No SQL database, immutable, transparent, and crypto-verifiable transaction logs
 * Shipping
 * Financial transactions
 
-#### Amazon Timestream
+#### Timestream
 
 Time Series Data (Logged over a series of times, allowing tracking data)
 
@@ -268,7 +268,7 @@ Examples:
 
 Virtual Private Cloud is an isolated n/w within AWS for our account. Anything going in and out of this n/w can be controlled by us.
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
 
 * A subnet can only be created within one AZ. A subnet cannot be spanned across multiple AZs.
 * A subnet mask should be b/w `/16 and /28`
@@ -330,7 +330,7 @@ There are different routing techniques offered by Route 53
 
 ### Elastic Load Balancer (ELB)
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
 As the name suggests, it is used to keep multiple resources behind a single listener
 
@@ -350,7 +350,9 @@ There are multiple types of load balancers
 
 Deregistration delay is nothing but it allows inflight requests to be completed before they before unhealthy.
 
-### Cloudwatch
+### Monitoring
+
+#### Cloudwatch
 
 Cloudwatch is an AWS service for monitoring and observability.
 
@@ -367,3 +369,594 @@ Log Group: A collection of log streams
 AWS Managed Grafana: Graphical metrics
 
 AWS Managed Prometheus: AWS managed open-source docker container logs
+
+### High Availability  and Scaling
+
+Horizontal scaling  - Increase the number of compute resources to meet the demand like adding more EC2 instances to handle load behind a load balancer
+
+Vertical scaling - Increase the compute on the same resource either by increasing the memory, CPU, or disk space like adding more compute to the same database instance.
+
+#### Launch Templates
+
+Launch templates are a feature offered by AWS to configure EC2 launch parameters at a very granular level and save it as a template. We can configure stuff like AMI, EC2 instance size, security groups, networking information, etc...
+
+* Supports versioning
+* Recommended by AWS
+
+The old version of the same is called **Launch Configuration** AWS recommends using Launch Templates.
+
+* We cannot include networking information in Launch configurations
+
+#### Auto Scaling Groups
+
+They let you scale the EC2 instances horizontally based on the rules, so we don't need to worry about under or over-compute problems.
+
+Things needed in the auto-scaling group:
+
+* Template
+* n/w and purchase information
+* ELB configuration
+* Scaling policy (min, max, desired capacity)
+* Monitoring configuration like (SNS notifications)
+
+{% hint style="info" %}
+Autoscaling groups are exclusive to EC2 instances, and we should always configure ELB to manage the traffic between instances.
+{% endhint %}
+
+Custom actions on the instances when life cycle events occur. They can wait for 24 hours. There are scaling out and scaling in hooks.
+
+There are 3 types of scaling options
+
+* Reactive Scaling (This is where scaling out and scaling in happens based on the load received)
+* Scheduled Scaling (This is used when we know when the load will be more, and schedule to scale out or down based on the load received)
+* Predictive Scaling (This is where AWS uses AI to predict the load and does the scaling for us)
+
+#### RDS Scaling
+
+* Vertical scaling
+* Scaling storage (once scaled up, it cannot go down)
+* Read Replicas
+* Aurora serverless
+
+#### **DynamoDB**
+
+Amazon proprietary database to store key-value pairs. Highly scalable and available database
+
+Charges are based on RCU (Read Capacity Unit) & WCU (Write Capacity Unit). There are 2 ways to configure it
+
+* Provisioned (most cost-effective) we define the RCU & WCU
+* On-demand (Expensive) and it's useful for sporadic work loads)
+
+{% hint style="info" %}
+1RCU = 4KB/1 strong consistent read
+
+&#x20;          \= 4KB/2 eventually consistent reads
+
+1WCU = 1KB/sec
+{% endhint %}
+
+A recovery point objective (RPO) is used to recover the data, the lower the time -> more the cost
+
+### Decoupling Workflows
+
+Decoupling workflow is a pattern where we loosely couple all the resources within our system to make them highly available or to make sure the entire system doesn't come down if something happens.
+
+#### Simple Queue System (SQS)
+
+* Delivery delay (0-15min)
+* Message size: 256KB
+* Message retention: (1min - 14 days) default is 4 days
+* Offers long polling and short polling (Preferred option is long polling) as it costs more to poll the queue)
+* We can use queue depth to trigger auto-scaling of the resources listening to the queue.
+* Visibility timeout: It's an important feature where the message is locked once the processing of it starts, so no other consumers can see it. If the consumer doesn't respond within the configured visibility timeout the message re-appears on the queue for processing again. If the message is processed before visibility timeout it gets deleted.
+* Dead Letter Queue (DLQ): Messages that fail will end up in this queue and these queues will have the same retention period as normal queues. Queues have re-drive capability meaning they can move back to the actual queue for processing
+* FIFO (First In First Out)
+  * Always ordered
+  * No message duplication
+  * Only 300 messages/second, batching lets you get 10 times more so 3000 messages/second
+  * A high throughput option will let you process 9000 messages/second, again batching enables you to get 10 times more so 90000 messages/sec
+
+#### Simple Notification Service (SNS)
+
+It's a simple push notification service at scale. A producer will send messages to a topic and subscribers will receive a message once published on the topic.
+
+* 256 KB
+* DLQ for failed SNS messages.
+* Can set access policies.
+* We can send large message payloads as high as 2GB, and leverage S3 through the SNS extended library.
+* Fanout, messages published are replicated to multiple endpoints.
+* Message Filtering: Policy based on content to differentiate subscribers.
+
+#### API Gateway
+
+* Create, maintain, monitor, and secure API
+* It acts as a front door for all the API
+* Can attach WAF for DDoS protection, rate limit, etc...
+* There are 3 types
+  * Rest API
+  * HTTP API (similar to Rest, but with minimal features)
+  * WebSocket API
+* Supports multiple stages, versions
+* There are 2 types of configurations for performance
+  * Edge-based (fast across the globe)
+  * Regional (fast within the region)
+
+#### Batch
+
+*
+
+### Big Data
+
+3 v's - Volume, Velocity, Variety
+
+#### Redshift
+
+* Fully managed data warehouse solution
+* Upto 16PB of data
+* Relational
+* Built on top of Postgres SQL (not for OLTP)
+* It is not a replacement for traditional RDS
+* It's very powerful and efficient for analytics
+* Columnar based storage
+* Multi AZs (Only 2 at this moment in time)
+* Snapshots (We can't manage them)
+* No way to convert single AZ - multi and vice versa
+* Favor large batches to inserts (Performance)
+
+{% hint style="info" %}
+Redshift Spectrum is used to efficiently query & retrieve data from S3 instead of loading the information into tables.
+{% endhint %}
+
+#### Enhanced VPC Routing
+
+#### Elastic Map Reduce
+
+#### Kinesis
+
+#### Kinesis Data Analytics
+
+#### Athena
+
+#### Glue
+
+#### QuickSight
+
+#### Data Pipeline
+
+#### Managed Streaming for Kafka (MSK)
+
+#### OpenSearch
+
+### Serverless Architecture
+
+#### Lambda
+
+#### Fargate
+
+#### Event Bridge
+
+#### Elastic Container Registry (ECR)
+
+#### Elastic Container Service (ECS)
+
+#### Elastic Kubernetes Service (EKS)
+
+#### EKS-D (Self Managed)
+
+#### ECS Managed
+
+#### Aurora Serverless
+
+#### App Sync
+
+### Security
+
+#### Cloud Trail
+
+#### Shield
+
+#### Shield Advanced
+
+#### WAF (Web Application Firewall)
+
+#### Guard Duty
+
+#### Firewall Manager
+
+#### Macie
+
+#### Inspector
+
+#### KMS (Key Management Service) & Cloud HSM (Hardware Security Module)
+
+#### Secrets Manager
+
+#### Presigned URLs
+
+#### Advanced IAM Policies
+
+#### Audit Manager
+
+#### Artifact
+
+#### Cognito
+
+#### Detective
+
+#### Network Firewall
+
+#### Security Hub
+
+### Automation
+
+#### Cloud Formation Templates
+
+#### Elastic Beanstalk (EB)
+
+#### Systems Manager
+
+### Caching
+
+#### Cloudfront
+
+#### Elastic Cache (Internal Caching DB)
+
+#### DAX (DynamoDB Accelerator)
+
+#### Global Accelerator
+
+### Governance
+
+#### AWS Organizations
+
+* Create and efficiently manage multiple AWS accounts.
+* Centralize the control of accounts and streamline their management from a single place.
+* 2 Categories of account types
+  * Management Account (Payer Account): This account is a primary account for managing AWS organizations. It includes security policies and billing. It is only one for the organization.
+  * Member Account: All the other accounts within the organization are linked to the primary account.&#x20;
+* Consolidated billing from all the member accounts to a payer account. Aggregated usage discounts will be applied to the billing and will be effective cost savings.
+* Shared reserved instances and savings plans.
+* Concepts
+  * Multi-account
+  * Tag enforcement
+  * Organizational Unit (OU) -> grouping multiple accounts into groups
+  * Service Control Policies (SCP): Policies applied to OU or accounts in terms of what they can do, they don't affect the primary account.
+  * Centralized logging account for cloud trail logs to easily manage logging at the org level and simplify auditing.
+
+#### AWS RAM (Resource Access Manager)
+
+Service that facilitates the sharing of resources with other accounts, even if the accounts are outside the organization.
+
+* Avoids creating duplicate copies of the resources in other accounts
+* Resources allowed to share
+  * Transit gateways
+  * VPC subnets
+  * License manager
+  * Route 53 resolver rules
+  * Dedicated hosts and more...
+* Ownership & Participant accounts
+  * This is specific to VPC resources.
+  * Ownership accounts can create and manage the VPC resources that are shared, they cannot delete any resource allocation done by participant accounts.
+  * On the other hand participant accounts can use the shared resources, but cannot delete them.
+
+#### AWS Config
+
+Inventory management and control tool for infrastructure.
+
+* Historical record of changes made to infrastructure over a period.
+* Can define rules and make them comply
+* Integrates with SNS
+* It is per region basis
+* It is only meant for visibility, but it will not prevent configuration changes.
+* Automatic remediation
+* Easily integrates with SNS
+
+#### Directory Service
+
+* AWS managed active directory
+* Managed Microsoft AD&#x20;
+* AD Connector -> A Tunnel b/w AWS and On-prims AD
+* Simple AD (Standalone directory powered by Linux Samba AD compatible server)
+
+#### Cost Explorer
+
+* Visualize and analyze costs
+* Generate custom reports based on a variety of factors
+* Breakdown costs monthly, hourly, etc...
+* Built-in forecasting for up to a year.
+
+#### AWS Budgets
+
+* Plan and set expectations around cost.
+* Let you set the alerts when reaching the budgets
+* There are three types
+  * Cost Budgets
+  * Usage budgets
+  * &#x20;RI Utilization budgets
+  * RI coverage budgets
+  * Savings Plan utilization
+  * Savings plan coverage budgets
+
+#### AWS Compute optimizer
+
+* Report current usage optimizations and provide recommendations to save money and increase performance.
+* Several resources like EC2, Auto scale groups, EBS, and Lambda functions
+* Standalone AWS account (No AWS orgs enabled), Member account, Management account (Payer account)
+* Disabled by default.
+* Savings Plan
+  * Flexible pricing models
+  * Save up to 72% on compute
+  * Lower prices on EC2 instances
+  * They apply for Lambda & Fargate
+  * They are different types
+    * Compute savings plan (Any EC2 compute, Lambda, or Fargate usage) up to 62% off, as it is flexible
+    * EC2 Instance savings plan (Only for specific Ec2 instance types and regions) up to 70%
+    * Sagemaker savings up to 64%
+
+#### Trusted Advisor
+
+* Fully managed auditing tool
+* Provide security recommendations or best practices
+* It works at the account level
+* Basic or developer accounts will get partial checks
+* Enterprise will get full checks
+* Categories
+  * Cost optimization
+  * Performance
+  * Security
+  * Fault tolerance
+  * Service Limits
+
+#### AWS Control Tower
+
+* Governance
+* Orchestration service for account creation and security controls
+* Landing zone: Well-architected, multi-account environment based on compliance and best practices.
+* Guardrails: High-level rules to provide governance.
+  * Preventative: Will not allow misconfiguration in an account.
+  * Detective: Will allow the violations, but will be alerted to act on them.
+* Account factory: Configurable account template, standardizing pre-approved configs for the account.
+* Cloud-formation stack sets Automated deployment of templates deploying repeatable resources for governance.
+* Shared accounts: 3 accounts were created by the control tower for a landing zone.
+  * Management
+  * Log archive
+  * Audits
+
+#### AWS License Manager
+
+* Simplifies managing licenses.
+* Manages licenses across multiple accounts including on-premise.
+* Reduces overages, via inventory tracking, rules & license consumptions.
+
+#### AWS Health
+
+* Visibility of resource performances and availability of resources.
+* Near real-time alerts to perform certain types of actions
+
+#### AWS Service Catalog
+
+* To create and manage catalogs of IT services that are pre-approved.
+* Things like AMI images, databases, pre-approved configs, etc...
+* Centralized
+* They are cloud formation templates.
+* Benefits:
+  * Standardize
+  * Self-service capabilities
+
+#### AWS Proton
+
+* Offers IaC provision and deployment for serverless and container-based architecture.
+
+#### AWS Well-Architected Tool
+
+* The Six Pillars
+  * Operational excellence
+  * Reliability
+  * Security
+  * Performance Efficiency
+  * Cost Optimization
+  * Sustainability
+* Continuous process to measure cloud architecture,
+* Assistance with documentation.
+* Guides for making workloads reliable, secure, efficient, and cost-effective.
+
+### Migration
+
+We could use a more traditional approach of transferring data through the Internet, but it is not always cost-effective or secure. The more the data, the more it takes to transfer information via the internet.
+
+That's where the Snow Family comes into the picture, It's AWS's way of transferring data, it's simply physical hardware in a secure wallet provided by AWS to transfer data from on-premises to the cloud physically.
+
+* **Snowcone**:
+  * 8TB of storage, 4GB of memory & 2 vCPUs
+  * IoT sensor integration
+* **Snowball Edge**: 48 TB - 81TB of storage, perfect for off-grid computing or migrating data.
+* **Snowmobile:** 100PB of storage, designed for exabyte-scale data center migration.
+
+#### Storage Gateway
+
+It is a hybrid cloud storage service that helps you to merge on-premises resources with the cloud. It can help with a one-time migration or long-term solution to sync b/w cloud and on-premises.
+
+* **File Gateway**
+  * An NFS or SMB mount (file share) backups data into S3.
+  * It can be used to extend on-premises storage
+  * Can help with migrations to AWS
+* **Volume Gateway**
+  * Backup drives
+  * Cached or stored mode
+  * Creates EBS snapshots
+  * Perfect for backup or migration
+* **Tape Gateway**
+  * Replaces physical tapes
+
+#### AWS DataSync
+
+It is a migration tool, NFS, SMB, or S3 API
+
+* It's an agent-based solution, we need to install it on-premises.
+* It can sync to S3, EFS, FSx
+
+Continuous sync, hybrid -> It's Storage Gateway
+
+Lift & Shift -> DataSync
+
+#### AWS Transfer Family
+
+Easily move files in and out of S3 or EFS using SFTP, FTPS, FTP
+
+#### AWS Migration Hub
+
+A single place to track application migration to AWS
+
+SMS (Server Migration Service)
+
+DMS (Database Migration Service)
+
+#### AWS Application Discovery Service
+
+* Helps migrations to AWS via collection of usage and configuration data from on-premises servers
+* Integrates with Migration Hub
+* Track applications
+* Discovery Types
+  * Agentless: OVA file within VMware vCenter,  identifies hosts and VMs in vCenter.
+  * Agent-based: Install on each VM & physical server, collects more information.
+* AWS MGN:
+  * Automate lift and shift service into AWS
+  * Flexible
+  * Replicate source servers into AWS
+
+#### AWS Data Migration Sevice (DMS)
+
+* It's a migration tool
+* Migrate data into cloud or on-premises
+* At least one endpoint must live in the AWS
+* One-time migration or continuously replicating the data.
+* Schema Conversion Tool
+* Replication server running with source and target endpoints
+* Schedule tasks to run on the DMS
+* AWS can create the tables and primary keys
+* Leverage SCT for creating some or all of your tables, indexes, and more.
+* Source and target data stores are referred to as endpoints
+* 3 different migrations
+  * Full load
+  * Full load and change data capture (CDC)
+  * CDC only
+* CDC guarantees transactional integrity
+
+### Front-End Web and Mobile
+
+#### Amplify
+
+* Offers tools for developing full-stack web applications on AWS
+* There are 2 types of offerings
+  * Amplify hosting
+    * Support for common SPA frameworks like React, Angular, and Vue and also supports static site generators like Gatsby, Hugo, etc...
+    * Supports server-side rendering like NextJS
+  * Amplify Studio
+    * Easy Auth & Authorization
+    * Simplified development
+    * Ready-to-use components
+
+#### Device Farm
+
+* It's an application testing service
+* 2 forms of testing
+  * Automated
+  * Remote access
+
+#### Amazon pinpoint
+
+* Enables to engage with customers through  a variety  of messaging channels
+* Projects: A collection of information, segments, campaigns, journeys
+* Channels: Platform  where we intend to engage with users
+
+### Machine Learning
+
+#### Amazon Comprehend
+
+NLP to understand the meaning and sentiment in the text. It simply tells if people are speaking positively or negatively.
+
+#### Kendra
+
+Intelligent search service powered by machine learning
+
+#### Textract
+
+Extract text from images, screenshots, tables, and PDFs. It is beyond OCR
+
+#### AWS Forecast
+
+time-series forecasting service that uses ML to build insight into data over the period
+
+#### Fraud Detector
+
+Detect fraud within the data using ML
+
+#### AWS Transcribe
+
+* Speech-to-text on-fly
+* Convert audio or video files into text
+* Example: generating sub-titles
+
+#### AWS Lex
+
+* NLP model to interact, for example, automated bots
+* Build virtual agents, voice assistance, and automated responses for common queries
+
+#### Polly
+
+Turns text into life-like speech. It allows you to create applications that talk and interact with you using a variety of languages and accent
+
+#### Rekognition
+
+Computer vision that automates the recognition of pictures and videos using deep learning and neural networks
+
+* Content Moderation
+* Face detection
+* Celebrity recognition
+* Streaming video event detection
+
+#### Sagemaker
+
+Deploy machine learning models into AWS
+
+* Ground Truth: labeling jobs for training datasets using active learning and human labeling
+* Notebook: Jupiter notebooks
+* Training: Train and tune models
+* Inference: Go ahead and deploy models
+* Elastic Inference: Speeds throughput and decreases the latency of real-time inferences
+
+#### AWS Translate
+
+ML service to translate from one language to another language
+
+### Media
+
+Elastic Transcoder: Allows to convert videos into device-supported formats.
+
+Amazon Kinesis Video Stream: Live stream videos
+
+
+
+Kinesis data streams
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+Firehose
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+Open Search
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+Event Bridge
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+AWS Cognito
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>

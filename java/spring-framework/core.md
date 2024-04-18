@@ -12,7 +12,7 @@ In spring the objects that form the backbone of your application and that are ma
 
 `ApplicationContext` interface represents the IoC container and is responsible for instantiating, configuring, and assembling the beans necessary for the application.
 
-<figure><img src="../../.gitbook/assets/image.png" alt="" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (7).png" alt="" width="563"><figcaption></figcaption></figure>
 
 Configuration metadata required for the IoC container is usually through XML or Java-based configuration.
 
