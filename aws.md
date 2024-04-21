@@ -483,7 +483,41 @@ It's a simple push notification service at scale. A producer will send messages 
 
 #### Batch
 
-*
+* Batch is used to perform compute intense operations
+* It's fully configured either using EC2, ECS, or Fargate
+* It can automatically scale up or down
+* Important Terminology
+  * Job: Unit of work
+  * Job Definition: It's the blueprint similar to task definition in ECS where we define the environment variables, storage, vCPU, memory, docker image, start command, etc...
+  * Job Queues: That's where the jobs get submitted
+
+#### Message Queue (MQ)
+
+* Supports both Apache MQ & Rabbit MQ
+* Prefer SNS & SQS over this service
+* It requires a private n/w like VPC, compared to SNS & SQS being public
+
+#### Step Functions
+
+* Coordinate distributed apps with step functions
+* It's an orchestration service to combines the use of different services like defining flows
+* There are 2 types
+  * Standard
+    * Executes only one
+    * Can run up to a year
+    * 24000 executions/year
+    * Paid for transition
+  * Express
+    * Executes at least once
+    * Can run only for 5 min
+    * Good for a high event rate
+* Uses Amazon state language
+
+#### App Flow
+
+* Exchanges data b/w saas applications & AWS services. For example SAP, Oracle ERP, etc...
+* It's bi-directional.
+* Can apply data mapping, filters, and triggers.
 
 ### Big Data
 
@@ -500,7 +534,7 @@ It's a simple push notification service at scale. A producer will send messages 
 * Columnar based storage
 * Multi AZs (Only 2 at this moment in time)
 * Snapshots (We can't manage them)
-* No way to convert single AZ - multi and vice versa
+* There is no way to convert single AZ - multi and vice versa
 * Favor large batches to inserts (Performance)
 
 {% hint style="info" %}
@@ -511,33 +545,132 @@ Redshift Spectrum is used to efficiently query & retrieve data from S3 instead o
 
 #### Elastic Map Reduce
 
+* Spark, Hive, HBase, etc...
+* EMR Storage
+  * Supports HDFS & EMR File System -> extended version of the Hadoop file system to access the data stored in S3, as if it is part of HDFS.
+* Clusters & Nodes
+  * Primary Node (Manage cluster)
+  * Core Node (Runs tasks and store data in FS)
+  * Task nodes (Only runs tasks, no storage)
+* Purchasing options
+  * On-Demand
+  * Reserved
+  * Spot (Only tasks)
+
 #### Kinesis
+
+Allows to ingest, process, and analyze data streams in real time.
+
+| Data Streams                                  | Firehose                      |
+| --------------------------------------------- | ----------------------------- |
+| Low latency streaming service                 | Data transfer service         |
+| Real time                                     | Near real time (60s)          |
+| Managed service, but need to configure shards | Fully Managed Service         |
+| Data can be stored from 1 - 365 days          | No capability of storing data |
+| Supports replay capability                    | No Replay                     |
+| Anyone can be consumer                        | Limited set of consumers      |
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p>Kinesis Data Streams</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption><p>Kinesis Firehose</p></figcaption></figure>
 
 #### Kinesis Data Analytics
 
+* Process streaming data using standard SQL
+* Real-time message delivery
+
 #### Athena
+
+* A service to analyze data in S3 using SQL without loading the data into databases.
+
+{% hint style="info" %}
+Serverless SQL -> Athena & Glue
+{% endhint %}
 
 #### Glue
 
+It is a serverless data integration service where it performs ETL without managing  underlying serves
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption><p>Athena &#x26; Glue</p></figcaption></figure>
+
 #### QuickSight
+
+* An alternative to Tableau (BI Tool)
+* Offers column-level security (Only Enterprises)
+* Pricing/session -> per user in quick sight
 
 #### Data Pipeline
 
+* ETL tool
+* Define Pipeline (business logic)
+* Managed to compute
+* Define task runners and data nodes
+
 #### Managed Streaming for Kafka (MSK)
 
+* It is a managed version of open open-source Kafka
+* Gives access to the control plane for creating, updating, and deleting clusters
+* Automatic recovery
+* MSK serverless is a fully managed version of MSK
+* Can be switched easily b/w them
+
 #### OpenSearch
+
+* It's an elastic search
+* Quick Analysis
+* It loves logs!
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
 ### Serverless Architecture
 
 #### Lambda
 
+* 1,000,000 requests & 40,000GB compute free per month.
+* It easily integrates with other services.
+* A max of 15 minutes execution time.
+* Configuration
+  * Runtime
+  * Permissions
+  * Networking
+  * Resources (memory, vCPU)
+  * Trigger
+* Quotes
+  * 1,000 executions at the same time
+  * 512MB - 10GB disk
+
 #### Fargate
+
+* Serverless compute engine for docker containers
+* Task definition for managing container and resources
+* It can be run through ECS or EKS, but the underlying infrastructure is managed by AWS
+* Fargate can be expensive
 
 #### Event Bridge
 
+* Serverless event bridge
+* Connect multiple applications through events
+* An event is a recorded change in AWS infrastructure, and it can be anything/
+* Scheduled events are also published through Event Bridge
+* We can define rules, a criteria  to match incoming events and send them to appropriate targets
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
 #### Elastic Container Registry (ECR)
 
+A registry for docker images within AWS can be both public and private.
+
+* Can define the lifetime of the image.
+* Checks for software vulnerabilities.
+* Scan on push
+* Results on vulnerabilities
+* Cross-region and cross-account
+* Cache rules
+* Integrates very tightly with ECS and EKS.
+
 #### Elastic Container Service (ECS)
+
+
 
 #### Elastic Kubernetes Service (EKS)
 
@@ -547,63 +680,175 @@ Redshift Spectrum is used to efficiently query & retrieve data from S3 instead o
 
 #### Aurora Serverless
 
+* Fully managed Aurora RDS.
+* On-demand auto-scaling.
+* Automated monitoring and adjusting capacity.
+* Per second billing.
+* ACU (Aurora Capacity Unit) = 2GB memory & vCPU.
+* 6 Copies spread across 3 AZs.
+* Easily swap b/w provisioned and serverless.
+
 #### App Sync
+
+Scalable GraphQL interface combining data from multiple sources
 
 ### Security
 
 #### Cloud Trail
 
+* Identifies who is making use of AWS resources, by tracking the API requests made for every service within our accounts.
+* Tracking parameters
+  * Metadata
+  * Identity
+  * Time
+  * Source IP
+  * Request parameters
+  * Response
+* After the fact investigation.
+* Near real-time intrusion detection using alerts.
+* Industry and regulatory compliance.
+
 #### Shield
+
+* Free DDoS protection
+* Layer 3 & 4
+* Protects ELB, Cloudfront, Route 53
+* Completely free
 
 #### Shield Advanced
 
+* Everything offered by Shield
+* Real-time notifications
+* 24/7 access DDoS response team
+* 3000$/month
+
 #### WAF (Web Application Firewall)
+
+* Protects Layer 7
+* Allows to filter or block requests based on
+  * IP address
+  * Req parameters
+* 3 Different flavors
+  * Allows everything except for the one specified
+  * Blocks everything except for the one specified
+  * Count the requests based on specific characteristics of the request
 
 #### Guard Duty
 
+* Threat detection service that continuously monitors malicious behavior like
+  * Unusual API calls
+  * Attempts to disable cloud trail
+  * Unauthorized deployments
+  * Compromised instances
+  * Port scanning and failed logins
+* &#x20; Monitors Cloud trail, VPC Flow, DNS logs
+* Automated responses using Cloudwatch events and lambda functions
+* Requires 7-14 days of baseline to start detecting anomalies
+
 #### Firewall Manager
+
+Security management service in one place. Allows to manage all firewall settings from one place across different accounts and organizations.
 
 #### Macie
 
+Used for detecting PII (Personal Identification Information) in S3 using ML.
+
 #### Inspector
+
+Automated security assessment service that helps to improve the security & compliance of applications deployed to EC2.
+
+* n/w assessment(open ports etc...) (Agent not required)
+* Host assessment (Agent required)
 
 #### KMS (Key Management Service) & Cloud HSM (Hardware Security Module)
 
+* Create and control encryption keys that  are used to encrypt data
+* HSM is a physical computing device that safeguards and manages digital keys & performs encryption and decryption functions
+
 #### Secrets Manager
+
+* Securely stores the credentials
+* Allows rotation
+* Protected by policies
+* Allows password rotation for databases
 
 #### Presigned URLs
 
-#### Advanced IAM Policies
+They are a way to share the protected S3 resources with time-limited temporary access.
 
 #### Audit Manager
 
+Continuously audits the AWS resource usage, great for compliance and regulatory mandates.&#x20;
+
 #### Artifact
+
+Easily download compliance documents using artifacts.
 
 #### Cognito
 
+Authentication and Authorization service for web and mobile applications.
+
+* User Pools: These can be used for sign-up and sign-in
+* Identity pools: Used within organizations to sync up their users and thus give access to resources.
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
 #### Detective
+
+Service can be used to find the root cause of the security issues, it's not similar to inspector where it scans for the vulnerabilities within EC2 instances and networks.
 
 #### Network Firewall
 
+A physical firewall system before VPC, completely controls the traffic that flows into VPC through the internet gateway.
+
 #### Security Hub
+
+A single place to view all security-related alerts like Guard duty, Inspector, Maice, and Firewall Manger across multiple accounts.
 
 ### Automation
 
 #### Cloud Formation Templates
 
+* Terraform-like service to provision infrastructure as code (IaaC)
+* Templates using JSON or YAML
+
 #### Elastic Beanstalk (EB)
 
+* Platform as a Service
+* Automate all the deployments
+* Manages EC2 instances
+
 #### Systems Manager
+
+* Control and manage instances in AWS (SSM Agent)
+* Automation (Resource Management)
+* Session Manager: Connect to resources without actually SSH into them (very secure)
 
 ### Caching
 
 #### Cloudfront
 
+Global distribution network (CDN) offering within AWS
+
 #### Elastic Cache (Internal Caching DB)
+
+* Memcache
+  * Only database caching solution
+  * No failover
+  * No Multi-AZ support
+  * No backup
+* Redis
+  * Can be used for anything including databases
+  * Failover support
+  * Multi-AZ
+  * Allows backups
 
 #### DAX (DynamoDB Accelerator)
 
 #### Global Accelerator
+
+* Uses n/w service that sends traffic through AWS global n/w
+* Meant for TCP and UDP traffic
 
 ### Governance
 
@@ -934,29 +1179,3 @@ ML service to translate from one language to another language
 Elastic Transcoder: Allows to convert videos into device-supported formats.
 
 Amazon Kinesis Video Stream: Live stream videos
-
-
-
-Kinesis data streams
-
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
-
-Firehose
-
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
-
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
-
-Open Search
-
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
-
-Event Bridge
-
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
-
-AWS Cognito
-
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
-
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
