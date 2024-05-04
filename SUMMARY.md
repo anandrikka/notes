@@ -6,6 +6,7 @@
   * [Spring Framework](java/spring-framework/README.md)
     * [Core](java/spring-framework/core.md)
 * [Data Structures](data-structures.md)
+* [Design Patterns](design-patterns.md)
 * [Docker](docker.md)
 * [AWS](aws/README.md)
   * [Associate Architect](aws/associate-architect.md)
