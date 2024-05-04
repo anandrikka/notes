@@ -1,4 +1,4 @@
-# AWS
+# Associate Architect
 
 I'm preparing for the AWS Associate Architect Certification, these notes will serve me as a quick lookup for all the topics
 
@@ -268,7 +268,7 @@ Examples:
 
 Virtual Private Cloud is an isolated n/w within AWS for our account. Anything going in and out of this n/w can be controlled by us.
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
 
 * A subnet can only be created within one AZ. A subnet cannot be spanned across multiple AZs.
 * A subnet mask should be b/w `/16 and /28`
@@ -330,7 +330,7 @@ There are different routing techniques offered by Route 53
 
 ### Elastic Load Balancer (ELB)
 
-<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
 As the name suggests, it is used to keep multiple resources behind a single listener
 
@@ -570,9 +570,9 @@ Allows to ingest, process, and analyze data streams in real time.
 | Supports replay capability                    | No Replay                     |
 | Anyone can be consumer                        | Limited set of consumers      |
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p>Kinesis Data Streams</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>Kinesis Data Streams</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption><p>Kinesis Firehose</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption><p>Kinesis Firehose</p></figcaption></figure>
 
 #### Kinesis Data Analytics
 
@@ -591,7 +591,7 @@ Serverless SQL -> Athena & Glue
 
 It is a serverless data integration service where it performs ETL without managing  underlying serves
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption><p>Athena &#x26; Glue</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption><p>Athena &#x26; Glue</p></figcaption></figure>
 
 #### QuickSight
 
@@ -620,7 +620,7 @@ It is a serverless data integration service where it performs ETL without managi
 * Quick Analysis
 * It loves logs!
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
 ### Serverless Architecture
 
@@ -654,7 +654,7 @@ It is a serverless data integration service where it performs ETL without managi
 * Scheduled events are also published through Event Bridge
 * We can define rules, a criteria  to match incoming events and send them to appropriate targets
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 #### Elastic Container Registry (ECR)
 
@@ -791,7 +791,7 @@ Authentication and Authorization service for web and mobile applications.
 * User Pools: These can be used for sign-up and sign-in
 * Identity pools: Used within organizations to sync up their users and thus give access to resources.
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 #### Detective
 

@@ -7,4 +7,5 @@
     * [Core](java/spring-framework/core.md)
 * [Data Structures](data-structures.md)
 * [Docker](docker.md)
-* [AWS](aws.md)
+* [AWS](aws/README.md)
+  * [Associate Architect](aws/associate-architect.md)
