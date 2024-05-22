@@ -2,6 +2,7 @@
 
 * [Introduction](README.md)
 * [Java](java/README.md)
+  * [Fundamentals](java/fundamentals.md)
   * [New Features](java/releases.md)
   * [Spring Framework](java/spring-framework/README.md)
     * [Core](java/spring-framework/core.md)
