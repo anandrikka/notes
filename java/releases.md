@@ -4,6 +4,14 @@ description: Go through all releases and make important notes for each release.
 
 # New Features
 
+### Version 8
+
+| Change | Explanation |
+| ------ | ----------- |
+|        |             |
+|        |             |
+|        |             |
+
 Java 8 is a major improvement from v7. It included a lot of features to cope with other programming languages. It's a step towards functional programming and introduces _<mark style="background-color:blue;">Functions</mark>_ as first-class citizens in Java. The focus has been really on reducing the boilerplate code to write the stuff.
 
 ### Functions or Lambda Expressions
