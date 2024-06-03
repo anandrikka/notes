@@ -10,4 +10,5 @@
 * [Design Patterns](design-patterns.md)
 * [Docker](docker.md)
 * [AWS](aws/README.md)
-  * [Associate Architect](aws/associate-architect.md)
+  * [Associate Architect](aws/associate-architect/README.md)
+    * [🍕 Cheat Sheet](aws/associate-architect/cheat-sheet.md)
